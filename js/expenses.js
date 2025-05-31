@@ -1,4 +1,5 @@
 import { getData, setData } from "./storage.js";
+import { formatDate } from "./helpers.js";
 
 const expenseForm = document.getElementById("expenseForm");
 const expensesTableBody = document.querySelector("#expensesTable tbody");
@@ -57,7 +58,7 @@ function renderExpenses() {
       (e, i) => `
     <tr>
       <td>${i + 1}</td>
-      <td>${e.date}</td>
+      <td>${formatDate(e.date)}</td>
       <td>${e.farm}</td>
       <td>${e.type}</td>
       <td>${e.description}</td>

@@ -6,7 +6,7 @@ import { renderSummary } from "./summary.js";
 document.addEventListener("DOMContentLoaded", async () => {
   await initializeStorage();
   setupImportExport();
-  showSection("expenses");
+  showSection("cattle");
   initExpenseSection();
   initCattleSection();
 });

@@ -48,19 +48,20 @@ export function renderSummary() {
   totalNetProfit = totalGrossProfit - totalExpenses;
 
   const summaryValues = {
+    "Ganancia Neta": formatCurrency(totalNetProfit),
     "Inversión en Ganado": formatCurrency(totalPurchase),
     "Total de Gastos": formatCurrency(totalExpenses),
     "Total de Ventas": formatCurrency(totalSales),
+    "Ganancia Bruta": formatCurrency(totalGrossProfit),
     "Comisiones (3%)": formatCurrency(totalCommission),
     Transporte: formatCurrency(totalTransport),
-    "Ganancia Bruta": formatCurrency(totalGrossProfit),
-    "Ganancia Neta": formatCurrency(totalNetProfit),
     "Margen de Ganancia": `${
       totalPurchase > 0
         ? ((totalNetProfit / totalPurchase) * 100).toFixed(2)
         : 0
     }%`,
-    "Días Promedio en Finca": countSold > 0 ? totalDays / countSold : 0,
+    "Días Promedio en Finca":
+      countSold > 0 ? (totalDays / countSold).toFixed(0) : 0,
     "Promedio de Ganancia Kg/Día":
       totalDays > 0 ? (totalWeightGain / totalDays).toFixed(2) : 0,
     "Promedio Precio Compra": formatCurrency(
@@ -69,10 +70,10 @@ export function renderSummary() {
     "Promedio Precio Venta": formatCurrency(
       countSold > 0 ? totalSalePrice / countSold : 0
     ),
-    "Promedio Peso Compra": countSold > 0 ? totalPurchaseWeight / countSold : 0,
-    "Promedio Peso Venta": formatCurrency(
-      countSold > 0 ? totalSaleWeight / countSold : 0
-    ),
+    "Promedio Peso Compra":
+      countSold > 0 ? (totalPurchaseWeight / countSold).toFixed(0) : 0,
+    "Promedio Peso Venta":
+      countSold > 0 ? (totalSaleWeight / countSold).toFixed(0) : 0,
     "Ganancia Precio/Día": formatCurrency(
       totalDays > 0 ? totalNetProfit / totalDays : 0
     ),
@@ -88,6 +89,8 @@ export function renderSummary() {
     const card = document.createElement("div");
     card.className = "summary-card";
     if (item.concept === "Ganancia Neta") card.classList.add("important");
+    if (item.concept === "Inversión en Ganado") card.classList.add("important");
+    if (item.concept === "Ganancia Bruta") card.classList.add("important");
 
     const monto = summaryValues[item.concept] ?? 0;
     item.amount = monto;

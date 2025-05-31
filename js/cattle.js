@@ -1,5 +1,5 @@
 import { getData, setData } from "./storage.js";
-import { formatCurrency, diffDays } from "./helpers.js";
+import { formatCurrency, diffDays, formatDate } from "./helpers.js";
 
 const form = document.getElementById("cattleForm");
 const tableBody = document.querySelector("#cattleTable tbody");
@@ -101,8 +101,7 @@ function getFormData() {
   const totalCompra = precioCompra * pesoCompra;
   const comision = precioVenta * pesoVenta * 0.03;
   const totalVenta = precioVenta * pesoVenta - transporte - comision;
-  const diasFinca = fechaVenta ? diffDays(fechaCompra, fechaVenta) : 0;
-  //   const gananciaBruta = totalVenta - totalCompra;
+  const diasFinca = diffDays(fechaCompra, fechaVenta || new Date());
   const rawGananciaBruta = totalVenta - totalCompra;
   const gananciaBruta =
     propiedad === "A medias" ? rawGananciaBruta / 2 : rawGananciaBruta;
@@ -150,21 +149,23 @@ function renderTable() {
       <td>${index + 1}</td>
       <td>${animal.idGanado}</td>
       <td>${animal.finca}</td>
-      <td>${animal.fechaCompra}</td>
+      <td>${formatDate(animal.fechaCompra)}</td>
       <td>${animal.sexo}</td>
       <td>${formatCurrency(animal.precioCompra)}</td>
       <td>${animal.pesoCompra}</td>
       <td>${formatCurrency(animal.totalCompra)}</td>
-      <td>${animal.fechaVenta || ""}</td>
-      <td>${formatCurrency(animal.precioVenta)}</td>
+      <td>${formatDate(animal.fechaVenta) || ""}</td>
+      <td>${animal.precioVenta ? formatCurrency(animal.precioVenta) : ""}</td>
       <td>${animal.pesoVenta || ""}</td>
-      <td>${formatCurrency(animal.transporte)}</td>
-      <td>${formatCurrency(animal.comision)}</td>
-      <td>${formatCurrency(animal.totalVenta)}</td>
-      <td>${animal.diasFinca}</td>
-      <td>${formatCurrency(animal.gananciaBruta)}</td>
-      <td>${animal.gananciaKgDia}</td>
-      <td>${animal.margenGanancia}%</td>
+      <td>${animal.transporte ? formatCurrency(animal.transporte) : ""}</td>
+      <td>${animal.comision ? formatCurrency(animal.comision) : ""}</td>
+      <td>${animal.totalVenta ? formatCurrency(animal.totalVenta) : ""}</td>
+      <td>${diffDays(animal.fechaCompra, animal.fechaVenta || new Date())}</td>
+      <td>${
+        animal.gananciaBruta ? formatCurrency(animal.gananciaBruta) : ""
+      }</td>
+      <td>${animal.gananciaKgDia || ""}</td>
+      <td>${animal.margenGanancia ? animal.margenGanancia + "%" : ""} </td>
       <td>${animal.estado}</td>
       <td>${animal.propiedad}</td>
       <td>${animal.observaciones}</td>

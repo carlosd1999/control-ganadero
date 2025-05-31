@@ -34,6 +34,11 @@
     "animals": [],
     "summary": [
         {
+            "concept": "Ganancia Neta",
+            "amount": 0,
+            "note": "Utilidad final"
+        },
+        {
             "concept": "Inversión en Ganado",
             "amount": 0,
             "note": "Total compra de ganado"
@@ -49,6 +54,11 @@
             "note": "Total ingresos por venta"
         },
         {
+            "concept": "Ganancia Bruta",
+            "amount": 0,
+            "note": "Excluye otros gastos"
+        },
+        {
             "concept": "Comisiones (3%)",
             "amount": 0,
             "note": "Comisión sobre ventas"
@@ -57,16 +67,6 @@
             "concept": "Transporte",
             "amount": 0,
             "note": "Flete a la subasta"
-        },
-        {
-            "concept": "Ganancia Bruta",
-            "amount": 0,
-            "note": "Excluye otros gastos"
-        },
-        {
-            "concept": "Ganancia Neta",
-            "amount": 0,
-            "note": "Utilidad final"
         },
         {
             "concept": "Margen de Ganancia",
