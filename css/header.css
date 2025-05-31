@@ -1,0 +1,94 @@
+header {
+  background-color: #2e7d32;
+  color: white;
+  padding: 1rem;
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Logo y título */
+.logo-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.logo {
+  height: 70px;
+  width: 70px;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* lo vuelve blanco */
+}
+
+.title-centered {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+/* Botones de navegación */
+.nav-buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-buttons button {
+  background-color: white;
+  color: #2e7d32;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.nav-buttons button:hover {
+  background-color: #c8e6c9;
+}
+
+/* Botones de importar/exportar en esquina superior derecha */
+.import-export-buttons {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.import-export-buttons button {
+  background-color: white;
+  color: #2e7d32;
+  border: none;
+  padding: 0.4rem 0.6rem;
+  font-size: 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.import-export-buttons button:hover {
+  background-color: #c8e6c9;
+}
+
+/* Responsive ajustes si querés para pantallas pequeñas */
+@media (max-width: 600px) {
+  .logo {
+    height: 100px;
+    width: 100px;
+  }
+
+  .title-centered {
+    font-size: 1.2rem;
+  }
+
+  .import-export-buttons {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}

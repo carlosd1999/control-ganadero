@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control Ganadero</title>
+    <link rel="icon" type="image/png" href="./assets/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="stylesheet" href="./css/header.css" />
+    <link rel="stylesheet" href="./css/expenses.css" />
+    <link rel="stylesheet" href="./css/cattle.css" />
+    <link rel="stylesheet" href="./css/sumary.css" />
+  </head>
+  <body>
+    <header>
+      <div class="import-export-buttons">
+        <button id="importBtn" title="Importar JSON">
+          <i class="fa-solid fa-upload"></i>
+        </button>
+        <button id="exportBtn" title="Exportar JSON">
+          <i class="fa-solid fa-download"></i>
+        </button>
+        <input type="file" id="importInput" style="display: none" />
+      </div>
+
+      <div class="logo-title">
+        <img src="./assets/logo.png" alt="Logo" class="logo" />
+        <h1 class="title-centered">Control Ganadero</h1>
+      </div>
+
+      <nav class="nav-buttons">
+        <button onclick="showSection('expenses')">Gastos</button>
+        <button onclick="showSection('cattle')">Animales</button>
+        <button onclick="showSection('summary')">Resumen</button>
+      </nav>
+    </header>
+
+    <!-- Secciones de contenido -->
+    <main>
+      <section id="expenses" class="section">
+        <h2>Registro de Gastos</h2>
+
+        <form id="expenseForm">
+          <div class="form-group">
+            <label>Fecha:</label>
+            <input type="date" name="date" required />
+          </div>
+          <div class="form-group">
+            <label>Finca:</label>
+            <select name="farm" required></select>
+          </div>
+          <div class="form-group">
+            <label>Tipo de Gasto:</label>
+            <select name="type" required></select>
+          </div>
+          <div class="form-group">
+            <label>Método de Pago:</label>
+            <select name="paymentMethod" required></select>
+          </div>
+          <div class="form-group">
+            <label>Monto (₡):</label>
+            <input type="number" name="amount" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label>Descripción:</label>
+            <input type="text" name="description" />
+          </div>
+          <button type="submit">Guardar</button>
+        </form>
+
+        <h3>Lista de Gastos</h3>
+
+        <div class="table-container">
+          <div class="table-wrapper">
+            <table id="expensesTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Fecha</th>
+                  <th>Finca</th>
+                  <th>Tipo</th>
+                  <th>Descripción</th>
+                  <th>Monto</th>
+                  <th>Método de Pago</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Gastos renderizados dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="cattle" class="section hidden">
+        <h2>Registro de Animales</h2>
+
+        <form id="cattleForm">
+          <div class="form-group">
+            <label for="propiedad">Propiedad:</label>
+            <select id="propiedad" required>
+              <option value="Propio">Propio</option>
+              <option value="A medias">A medias</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="idGanado">ID Ganado:</label>
+            <input type="text" id="idGanado" required />
+          </div>
+          <div class="form-group">
+            <label for="finca">Finca:</label>
+            <select id="finca" required></select>
+          </div>
+          <div class="form-group">
+            <label for="fechaCompra">Fecha de Compra:</label>
+            <input type="date" id="fechaCompra" required />
+          </div>
+          <div class="form-group">
+            <label for="sexo">Sexo:</label>
+            <select id="sexo" required></select>
+          </div>
+          <div class="form-group">
+            <label for="precioCompra">Precio Compra (₡):</label>
+            <input type="number" id="precioCompra" step="any" required />
+          </div>
+          <div class="form-group">
+            <label for="pesoCompra">Peso Compra (kg):</label>
+            <input type="number" id="pesoCompra" step="any" required />
+          </div>
+          <div class="form-group">
+            <label for="fechaVenta">Fecha de Venta:</label>
+            <input type="date" id="fechaVenta" />
+          </div>
+          <div class="form-group">
+            <label for="precioVenta">Precio Venta (₡):</label>
+            <input type="number" id="precioVenta" step="any" />
+          </div>
+          <div class="form-group">
+            <label for="pesoVenta">Peso Venta (kg):</label>
+            <input type="number" id="pesoVenta" step="any" />
+          </div>
+          <div class="form-group">
+            <label for="transporte">Transporte (₡):</label>
+            <input type="number" id="transporte" step="any" />
+          </div>
+          <div class="form-group">
+            <label for="estado">Estado:</label>
+            <select id="estado" required></select>
+          </div>
+          <div class="form-group">
+            <label for="observaciones">Observaciones:</label>
+            <textarea id="observaciones" rows="2"></textarea>
+          </div>
+          <button type="submit">Guardar</button>
+        </form>
+
+        <h3>Lista de Animales</h3>
+
+        <div class="table-wrapper">
+          <table id="cattleTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>ID Ganado</th>
+                <th>Finca</th>
+                <th>Fecha Compra</th>
+                <th>Sexo</th>
+                <th>Precio Compra</th>
+                <th>Peso Compra</th>
+                <th>Total Compra</th>
+                <th>Fecha Venta</th>
+                <th>Precio Venta</th>
+                <th>Peso Venta</th>
+                <th>Transporte</th>
+                <th>Comisión</th>
+                <th>Total Venta</th>
+                <th>Días en Finca</th>
+                <th>Ganancia Bruta</th>
+                <th>Ganancia Kg/Día</th>
+                <th>Margen Ganancia (%)</th>
+                <th>Estado</th>
+                <th>Propiedad</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+      <section id="summary" class="section hidden">
+        <h2>Resumen financiero</h2>
+        <div class="summary-grid" id="summaryCards">
+          <!-- Las tarjetas se generarán dinámicamente desde JS -->
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./js/main.js"></script>
+    <script type="module" src="./js/expenses.js"></script>
+    <script type="module" src="./js/cattle.js"></script>
+  </body>
+</html>
