@@ -8,7 +8,7 @@
 /* Título */
 #summary h2 {
   text-align: center;
-  color: #2e7d32;
+  color: var(--color-secondary);
   margin-bottom: 1.5rem;
 }
 
@@ -26,7 +26,7 @@
 .summary-card {
   background: #f9f9f9;
   padding: 1rem;
-  border-left: 5px solid #2e7d32;
+  border-left: 5px solid var(--color-primary);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: 0.3s ease;
@@ -39,14 +39,14 @@
 
 .summary-title {
   font-weight: bold;
-  color: #2e7d32;
+  color: var(--color-secondary);
   margin-bottom: 4px;
 }
 
 .summary-amount {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #000;
+  color: var(--color-label);
 }
 
 .summary-note {
@@ -57,5 +57,4 @@
 /* Destacar Ganancia Neta */
 .summary-card.important {
   background: #e8f5e9;
-  border-left-color: #43a047;
 }

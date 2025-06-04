@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="apple-mobile-web-app-title" content="Control Ganadero" />
+    <meta name="application-name" content="Control Ganadero" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <title>Control Ganadero</title>
@@ -37,8 +39,8 @@
       </div>
 
       <nav class="nav-buttons">
-        <button onclick="showSection('expenses')">Gastos</button>
         <button onclick="showSection('cattle')">Animales</button>
+        <button onclick="showSection('expenses')">Gastos</button>
         <button onclick="showSection('summary')">Resumen</button>
       </nav>
     </header>
@@ -76,7 +78,7 @@
           <button type="submit">Guardar</button>
         </form>
 
-        <h3>Lista de Gastos</h3>
+        <h2>Lista de Gastos</h2>
 
         <div class="table-container">
           <div class="table-wrapper">
@@ -163,38 +165,10 @@
           <button type="submit">Guardar</button>
         </form>
 
-        <h3>Lista de Animales</h3>
+        <h2>Lista de Animales</h2>
 
-        <div class="table-wrapper">
-          <table id="cattleTable">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>ID Ganado</th>
-                <th>Finca</th>
-                <th>Fecha Compra</th>
-                <th>Sexo</th>
-                <th>Precio Compra</th>
-                <th>Peso Compra</th>
-                <th>Total Compra</th>
-                <th>Fecha Venta</th>
-                <th>Precio Venta</th>
-                <th>Peso Venta</th>
-                <th>Transporte</th>
-                <th>Comisión</th>
-                <th>Total Venta</th>
-                <th>Días en Finca</th>
-                <th>Ganancia Bruta</th>
-                <th>Ganancia Kg/Día</th>
-                <th>Margen Ganancia (%)</th>
-                <th>Estado</th>
-                <th>Propiedad</th>
-                <th>Observaciones</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div id="cattleCards" class="cards-container">
+          <!-- Tarjetas renderizadas dinámicamente -->
         </div>
       </section>
       <section id="summary" class="section hidden">

@@ -1,16 +1,15 @@
 /* Sección general */
 #expenses {
   padding: 2rem;
-  background-color: #f9fbe7;
   border-radius: 8px;
   margin-bottom: 2rem;
 }
 
 /* Título */
 #expenses h2,
-h3 {
+#expenses h3 {
   text-align: center;
-  color: #2e7d32;
+  color: var(--color-secondary);
   margin-bottom: 1rem;
 }
 
@@ -33,7 +32,7 @@ h3 {
 
 #expenses label {
   font-weight: bold;
-  color: #2e7d32;
+  color: var(--color-label);
   margin-bottom: 4px;
 }
 
@@ -42,7 +41,7 @@ h3 {
 #expenses textarea {
   padding: 0.5rem;
   border-radius: 4px;
-  border: 1px solid #c8e6c9;
+  border: 1px solid var(--color-border);
   font-size: 0.95rem;
 }
 
@@ -65,7 +64,7 @@ h3 {
 #expenses button[type="submit"] {
   grid-column: 1 / -1;
   justify-self: end; /* Alinea a la derecha en el grid */
-  background-color: #2e7d32;
+  background-color: var(--color-primary);
   color: #fff;
   border: none;
   padding: 0.5rem 1.25rem;
@@ -85,13 +84,13 @@ h3 {
 #expenses hr {
   margin: 2rem 0;
   border: none;
-  border-top: 1px solid #c8e6c9;
+  border-top: 1px solid var(--color-border);
 }
 
 /* Tabla contenedor responsive */
 #expenses .table-wrapper {
   overflow-x: auto;
-  border: 1px solid #c8e6c9;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
 }
 
@@ -107,22 +106,22 @@ h3 {
 #expensesTable th,
 #expensesTable td {
   padding: 8px;
-  border: 1px solid #dcedc8;
+  border: 1px solid var(--color-border);
   text-align: center;
   white-space: nowrap;
 }
 
 #expensesTable thead {
-  background-color: #2e7d32;
+  background-color: var(--color-secondary);
   color: white;
 }
 
 #expensesTable tbody tr:nth-child(even) {
-  background-color: #f1f8e9;
+  background-color: #e8f5e9;
 }
 
 #expensesTable tbody tr:hover {
-  background-color: #dcedc8;
+  background-color: #c8e6c9;
 }
 
 /* Botones de acción como íconos */

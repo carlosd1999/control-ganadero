@@ -26,10 +26,12 @@ export function exportData() {
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
   });
+  const date = new Date().toLocaleDateString();
+  const time = new Date().toLocaleTimeString();
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "control-ganadero.json";
+  a.download = `control-ganadero-${date + "_" + time}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }

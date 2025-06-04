@@ -1,5 +1,5 @@
 import { getData } from "./storage.js";
-import { formatCurrency } from "./helpers.js";
+import { formatCurrency, diffDays } from "./helpers.js";
 
 export function renderSummary() {
   const data = getData();
@@ -19,25 +19,51 @@ export function renderSummary() {
   let totalPurchasePrice = 0;
   let totalSalePrice = 0;
   let countSold = 0;
+  let margenGanancia = 0;
+  let totalGrossProfitSold = 0;
 
   animals.forEach((animal) => {
-    const isHalf = animal.ownership === "Medias";
-    const factor = isHalf ? 0.5 : 1;
+    const isHalf = animal.propiedad === "A medias";
+    const comision = animal.precioVenta * animal.pesoVenta * 0.03 || 0;
+    const totalCompra = animal.pesoCompra * animal.precioCompra;
+    const totalVenta =
+      animal.pesoVenta * animal.precioVenta - animal.transporte - comision;
+    const rawGananciaBruta = totalVenta - totalCompra;
+    const gananciaBruta =
+      animal.estado === "Vendido" || animal.estado === "Muerto"
+        ? isHalf && rawGananciaBruta > 0
+          ? rawGananciaBruta / 2
+          : rawGananciaBruta
+        : 0;
+    const gananciaBrutaVendidos =
+      animal.estado === "Vendido"
+        ? isHalf && rawGananciaBruta > 0
+          ? rawGananciaBruta / 2
+          : rawGananciaBruta
+        : 0;
 
-    totalPurchase += animal.totalCompra * factor || 0;
-    totalCommission += animal.comision * factor || 0;
-    totalTransport += animal.transporte * factor || 0;
-    totalSales += animal.totalVenta * factor || 0;
-    totalGrossProfit += animal.gananciaBruta * factor || 0;
+    const diasFinca = diffDays(
+      animal.fechaCompra,
+      animal.fechaVenta || new Date()
+    );
+
+    totalPurchase += totalCompra;
+    totalCommission += comision || 0;
+    totalTransport += animal.transporte || 0;
+    totalSales += totalVenta || 0;
+    totalGrossProfit += gananciaBruta || 0;
+    totalGrossProfitSold += gananciaBrutaVendidos || 0;
 
     if (animal.estado === "Vendido") {
       countSold++;
-      totalDays += animal.diasFinca || 0;
+      totalDays += diasFinca || 0;
       totalWeightGain += animal.pesoVenta - animal.pesoCompra || 0;
       totalPurchaseWeight += animal.pesoCompra || 0;
       totalSaleWeight += animal.pesoVenta || 0;
       totalPurchasePrice += animal.precioCompra || 0;
       totalSalePrice += animal.precioVenta || 0;
+      margenGanancia +=
+        totalCompra > 0 ? ((totalVenta - totalCompra) / totalCompra) * 100 : 0;
     }
   });
 
@@ -55,30 +81,29 @@ export function renderSummary() {
     "Ganancia Bruta": formatCurrency(totalGrossProfit),
     "Comisiones (3%)": formatCurrency(totalCommission),
     Transporte: formatCurrency(totalTransport),
-    "Margen de Ganancia": `${
-      totalPurchase > 0
-        ? ((totalNetProfit / totalPurchase) * 100).toFixed(2)
-        : 0
-    }%`,
+    "Margen de Ganancia": `${(margenGanancia / countSold).toFixed(2)}%`,
     "Días Promedio en Finca":
       countSold > 0 ? (totalDays / countSold).toFixed(0) : 0,
-    "Promedio de Ganancia Kg/Día":
-      totalDays > 0 ? (totalWeightGain / totalDays).toFixed(2) : 0,
+    "Promedio de Ganancia Kg/Día": `${
+      totalDays > 0 ? (totalWeightGain / totalDays).toFixed(2) : 0
+    } kg`,
     "Promedio Precio Compra": formatCurrency(
       countSold > 0 ? totalPurchasePrice / countSold : 0
     ),
     "Promedio Precio Venta": formatCurrency(
       countSold > 0 ? totalSalePrice / countSold : 0
     ),
-    "Promedio Peso Compra":
-      countSold > 0 ? (totalPurchaseWeight / countSold).toFixed(0) : 0,
-    "Promedio Peso Venta":
-      countSold > 0 ? (totalSaleWeight / countSold).toFixed(0) : 0,
+    "Promedio Peso Compra": `${
+      countSold > 0 ? (totalPurchaseWeight / countSold).toFixed(0) : 0
+    } kg`,
+    "Promedio Peso Venta": `${
+      countSold > 0 ? (totalSaleWeight / countSold).toFixed(0) : 0
+    } kg`,
     "Ganancia Precio/Día": formatCurrency(
-      totalDays > 0 ? totalNetProfit / totalDays : 0
+      totalDays > 0 ? totalGrossProfitSold / totalDays : 0
     ),
     "Ganancia por animal": formatCurrency(
-      countSold > 0 ? totalNetProfit / countSold : 0
+      countSold > 0 ? totalGrossProfitSold / countSold : 0
     ),
   };
 

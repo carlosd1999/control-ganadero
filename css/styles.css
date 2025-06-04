@@ -1,8 +1,16 @@
+:root {
+  --color-primary: #2e7d32;
+  --color-secondary: #37474f;
+  --color-background: #f4f4f4;
+  --color-label: #212121;
+  --color-border: #e0e0e0;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f4f4f4;
+  background: var(--color-background);
 }
 
 .section {

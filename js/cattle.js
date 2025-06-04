@@ -2,8 +2,7 @@ import { getData, setData } from "./storage.js";
 import { formatCurrency, diffDays, formatDate } from "./helpers.js";
 
 const form = document.getElementById("cattleForm");
-const tableBody = document.querySelector("#cattleTable tbody");
-
+const container = document.getElementById("cattleCards");
 const farmSelect = document.getElementById("finca");
 const genderSelect = document.getElementById("sexo");
 const statusSelect = document.getElementById("estado");
@@ -98,23 +97,6 @@ function getFormData() {
     return null;
   }
 
-  const totalCompra = precioCompra * pesoCompra;
-  const comision = precioVenta * pesoVenta * 0.03;
-  const totalVenta = precioVenta * pesoVenta - transporte - comision;
-  const diasFinca = diffDays(fechaCompra, fechaVenta || new Date());
-  const rawGananciaBruta = totalVenta - totalCompra;
-  const gananciaBruta =
-    propiedad === "A medias" ? rawGananciaBruta / 2 : rawGananciaBruta;
-
-  const gananciaKgDia =
-    pesoVenta && diasFinca
-      ? ((pesoVenta - pesoCompra) / diasFinca).toFixed(2)
-      : 0;
-  const margenGanancia =
-    totalCompra > 0
-      ? (((totalVenta - totalCompra) / totalVenta) * 100).toFixed(2)
-      : 0;
-
   return {
     idGanado,
     finca,
@@ -122,67 +104,152 @@ function getFormData() {
     sexo,
     precioCompra,
     pesoCompra,
-    totalCompra,
     fechaVenta,
     precioVenta,
     pesoVenta,
     transporte,
-    comision,
-    totalVenta,
-    diasFinca,
-    gananciaBruta,
-    gananciaKgDia: parseFloat(gananciaKgDia),
-    margenGanancia: parseFloat(margenGanancia),
     estado,
     observaciones,
     propiedad,
   };
 }
 
-function renderTable() {
+function getAnimals() {
   const data = getData();
-  tableBody.innerHTML = "";
+  // Ordenar por estado: En Finca → Vendido → Muerto
+  const estadoOrden = { "En Finca": 0, Vendido: 1, Muerto: 2 };
+  return data.animals.sort((a, b) => {
+    return (estadoOrden[a.estado] ?? 3) - (estadoOrden[b.estado] ?? 3);
+  });
+}
 
-  data.animals.forEach((animal, index) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${index + 1}</td>
-      <td>${animal.idGanado}</td>
-      <td>${animal.finca}</td>
-      <td>${formatDate(animal.fechaCompra)}</td>
-      <td>${animal.sexo}</td>
-      <td>${formatCurrency(animal.precioCompra)}</td>
-      <td>${animal.pesoCompra}</td>
-      <td>${formatCurrency(animal.totalCompra)}</td>
-      <td>${formatDate(animal.fechaVenta) || ""}</td>
-      <td>${animal.precioVenta ? formatCurrency(animal.precioVenta) : ""}</td>
-      <td>${animal.pesoVenta || ""}</td>
-      <td>${animal.transporte ? formatCurrency(animal.transporte) : ""}</td>
-      <td>${animal.comision ? formatCurrency(animal.comision) : ""}</td>
-      <td>${animal.totalVenta ? formatCurrency(animal.totalVenta) : ""}</td>
-      <td>${diffDays(animal.fechaCompra, animal.fechaVenta || new Date())}</td>
-      <td>${
-        animal.gananciaBruta ? formatCurrency(animal.gananciaBruta) : ""
-      }</td>
-      <td>${animal.gananciaKgDia || ""}</td>
-      <td>${animal.margenGanancia ? animal.margenGanancia + "%" : ""} </td>
-      <td>${animal.estado}</td>
-      <td>${animal.propiedad}</td>
-      <td>${animal.observaciones}</td>
-      <td class="actions">
-        <button class="icon-btn edit" onclick="editAnimal(${
-          animal.id
-        })" title="Editar">
-          <i class="fa-classic fa-solid fa-pen-to-square fa-fw"></i>
-        </button>
-        <button class="icon-btn delete" onclick="deleteAnimal(${
-          animal.id
-        })" title="Eliminar">
-          <i class="fa-classic fa-solid fa-trash fa-fw"></i>
-        </button>
-      </td>
+function toKebabCase(str) {
+  return str.toLowerCase().replace(/\s+/g, "-");
+}
+
+function renderTable() {
+  container.innerHTML = "";
+  getAnimals().forEach((animal) => {
+    const card = document.createElement("div");
+    card.className = "animal-card";
+    const isHalf = animal.propiedad === "A medias";
+    const comision = animal.precioVenta * animal.pesoVenta * 0.03 || 0;
+    const totalCompra = animal.pesoCompra * animal.precioCompra;
+    const totalVenta =
+      animal.pesoVenta * animal.precioVenta - animal.transporte - comision;
+    const rawGananciaBruta = totalVenta - totalCompra;
+    const gananciaBruta =
+      isHalf && rawGananciaBruta > 0 ? rawGananciaBruta / 2 : rawGananciaBruta;
+    const diasFinca = diffDays(
+      animal.fechaCompra,
+      animal.fechaVenta || new Date()
+    );
+    const gananciaKgDia =
+      animal.pesoVenta && animal.fechaVenta
+        ? ((animal.pesoVenta - animal.pesoCompra) / diasFinca).toFixed(2)
+        : "";
+    const margenGanancia =
+      totalCompra > 0
+        ? (((totalVenta - totalCompra) / totalCompra) * 100).toFixed(2)
+        : 0;
+
+    let detailInfo = "";
+    let seeMoreButton = "";
+    const isSoldOrDead = Boolean(
+      (animal.fechaVenta && animal.estado == "Vendido") ||
+        animal.estado == "Muerto"
+    );
+
+    if (isSoldOrDead) {
+      detailInfo = `
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Fecha Venta:</strong> ${formatDate(animal.fechaVenta) || ""}
+      </div>
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Peso Venta:</strong> ${
+          animal.pesoVenta ? animal.pesoVenta + " kg" : ""
+        }
+      </div>
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Precio Venta:</strong> ${
+          animal.precioVenta ? formatCurrency(animal.precioVenta) : ""
+        }
+      </div>
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Total Venta:</strong>
+        ${formatCurrency(totalVenta)}
+      </div>
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Ganancia Bruta:</strong> ${formatCurrency(gananciaBruta)}
+      </div>
+      <div class="details hidden" data-id="${
+        animal.id
+      }"><strong>Ganancia Kg/Día:</strong> ${gananciaKgDia} kg</div>
+      <div class="details hidden" data-id="${
+        animal.id
+      }"><strong>Margen Ganancia:</strong> ${margenGanancia}%</div>
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Comisión:</strong> ${formatCurrency(comision)}
+      </div>
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Transporte:</strong> ${formatCurrency(animal.transporte)}
+      </div>`;
+      seeMoreButton = `
+      <button class="toggle-details-btn" onclick="toggleDetails(this, ${animal.id})">
+        Ver más
+      </button>`;
+    }
+
+    card.innerHTML = `
+    <div class="card-header">
+    <div class="left info-animla-container">
+      <h3 class="animal-id">ID: ${animal.idGanado}</h3>
+      <span class="animal-status ${toKebabCase(animal.estado)}">${
+      animal.estado
+    }</span>
+    <span class="animal-sexo ${toKebabCase(animal.sexo)}">${animal.sexo}</span>
+    </div>
+    <div class="right">
+      <button
+        class="icon-btn edit"
+        onclick="editAnimal(${animal.id})"
+        title="Editar"
+      >
+        <i class="fa-classic fa-solid fa-pen-to-square fa-fw"></i>
+      </button>
+      <button
+        class="icon-btn delete"
+        onclick="deleteAnimal(${animal.id})"
+        title="Eliminar"
+      >
+        <i class="fa-classic fa-solid fa-trash fa-fw"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="info-grid">
+      <div><strong>Finca:</strong> ${animal.finca}</div>
+      <div><strong>Propiedad:</strong> ${animal.propiedad}</div>
+      <div><strong>Fecha Compra:</strong> ${formatDate(
+        animal.fechaCompra
+      )}</div>
+      <div><strong>Peso Compra:</strong> ${animal.pesoCompra} kg</div>
+      <div><strong>Precio Compra:</strong> ${formatCurrency(
+        animal.precioCompra
+      )}</div>
+      <div><strong>Total Compra:</strong> ${formatCurrency(totalCompra)}</div>
+      <div><strong>Días en Finca:</strong> ${diasFinca}</div>
+      ${detailInfo}
+      <div>
+        <strong>Observaciones:</strong> ${animal.observaciones}
+      </div>
+    </div>
+    ${seeMoreButton}
+  </div>
     `;
-    tableBody.appendChild(row);
+
+    container.appendChild(card);
   });
 }
 
@@ -217,4 +284,20 @@ window.deleteAnimal = function (id) {
   data.animals = data.animals.filter((a) => a.id !== id);
   setData(data);
   renderTable();
+};
+
+// window.toggleDetails = function (button, id) {
+//   const extra = document.getElementById(id);
+//   extra.classList.toggle("hidden");
+//   button.textContent = extra.classList.contains("hidden")
+//     ? "Ver más"
+//     : "Ver menos";
+// };
+window.toggleDetails = function (button, id) {
+  const details = document.querySelectorAll(`.details[data-id="${id}"]`);
+  const isHidden = [...details].some((div) => div.classList.contains("hidden"));
+
+  details.forEach((div) => div.classList.toggle("hidden"));
+
+  button.textContent = isHidden ? "Ver menos" : "Ver más";
 };

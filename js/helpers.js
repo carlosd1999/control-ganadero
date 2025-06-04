@@ -10,11 +10,16 @@ export function formatDate(dateStr) {
   return `${day}/${month}/${year}`;
 }
 
-// Calcula diferencia de días entre dos fechas
+// Calcula diferencia de días entre dos fechas (ignora horas)
 export function diffDays(start, end) {
   const startDate = new Date(start);
   const endDate = new Date(end);
-  const diff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+  // Fuerza ambas fechas a medianoche (00:00:00)
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+
+  const diff = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
   return diff > 0 ? diff : 0;
 }
 
