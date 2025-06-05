@@ -17,7 +17,7 @@ window.showSection = function (sectionId) {
   });
   document.getElementById(sectionId).classList.remove("hidden");
   if (sectionId === "summary") {
-    renderSummary(); // ← Aquí se calcula y renderiza
+    renderSummary();
   }
 };
 
