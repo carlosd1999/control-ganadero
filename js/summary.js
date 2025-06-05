@@ -21,6 +21,11 @@ export function renderSummary() {
   let countSold = 0;
   let margenGanancia = 0;
   let totalGrossProfitSold = 0;
+  let totalPurchaseOnFarm = 0;
+  let totalDaysOnFarm = 0;
+  let averageGainKgDay = 0;
+  let averageSalePrice = 0;
+  let estimatedProfitOnFarm = 0;
 
   animals.forEach((animal) => {
     const isHalf = animal.propiedad === "A medias";
@@ -65,6 +70,10 @@ export function renderSummary() {
       margenGanancia +=
         totalCompra > 0 ? ((totalVenta - totalCompra) / totalCompra) * 100 : 0;
     }
+    if (animal.estado === "En Finca") {
+      totalPurchaseOnFarm += totalCompra;
+      totalDaysOnFarm += isHalf ? diasFinca / 2 : diasFinca;
+    }
   });
 
   expenses.forEach((gasto) => {
@@ -72,6 +81,10 @@ export function renderSummary() {
   });
 
   totalNetProfit = totalGrossProfit - totalExpenses;
+  averageGainKgDay =
+    totalDays > 0 ? (totalWeightGain / totalDays).toFixed(2) : 0;
+  averageSalePrice = countSold > 0 ? totalSalePrice / countSold : 0;
+  estimatedProfitOnFarm = totalDaysOnFarm * averageGainKgDay * averageSalePrice;
 
   const summaryValues = {
     "Ganancia Neta": formatCurrency(totalNetProfit),
@@ -84,15 +97,11 @@ export function renderSummary() {
     "Margen de Ganancia": `${(margenGanancia / countSold).toFixed(2)}%`,
     "Días Promedio en Finca":
       countSold > 0 ? (totalDays / countSold).toFixed(0) : 0,
-    "Promedio de Ganancia Kg/Día": `${
-      totalDays > 0 ? (totalWeightGain / totalDays).toFixed(2) : 0
-    } kg`,
+    "Promedio de Ganancia Kg/Día": `${averageGainKgDay} kg`,
     "Promedio Precio Compra": formatCurrency(
       countSold > 0 ? totalPurchasePrice / countSold : 0
     ),
-    "Promedio Precio Venta": formatCurrency(
-      countSold > 0 ? totalSalePrice / countSold : 0
-    ),
+    "Promedio Precio Venta": formatCurrency(averageSalePrice),
     "Promedio Peso Compra": `${
       countSold > 0 ? (totalPurchaseWeight / countSold).toFixed(0) : 0
     } kg`,
@@ -105,6 +114,11 @@ export function renderSummary() {
     "Ganancia por animal": formatCurrency(
       countSold > 0 ? totalGrossProfitSold / countSold : 0
     ),
+    "Inversión en Ganado en Finca": formatCurrency(totalPurchaseOnFarm),
+    "Ganancia Proyectada en Finca": formatCurrency(estimatedProfitOnFarm),
+    "Total Proyectado en Finca": formatCurrency(
+      totalPurchaseOnFarm + estimatedProfitOnFarm
+    ),
   };
 
   const container = document.getElementById("summaryCards");
@@ -113,9 +127,8 @@ export function renderSummary() {
   summary.forEach((item) => {
     const card = document.createElement("div");
     card.className = "summary-card";
-    if (item.concept === "Ganancia Neta") card.classList.add("important");
+    if (item.concept === "Total Proyectado en Finca") card.classList.add("important");
     if (item.concept === "Inversión en Ganado") card.classList.add("important");
-    if (item.concept === "Ganancia Bruta") card.classList.add("important");
 
     const monto = summaryValues[item.concept] ?? 0;
     item.amount = monto;

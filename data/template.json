@@ -112,6 +112,21 @@
             "concept": "Ganancia por animal",
             "amount": 0,
             "note": "Promedio de ganancia por animal"
+        },
+        {
+            "concept": "Inversión en Ganado en Finca",
+            "amount": 0,
+            "note": "Inversión actual en animales vivos"
+        },
+        {
+            "concept": "Ganancia Proyectada en Finca",
+            "amount": 0,
+            "note": "Utilidad estimada por vender"
+        },
+        {
+            "concept": "Total Proyectado en Finca",
+            "amount": 0,
+            "note": "Inversión más ganancia esperada"
         }
     ]
 }
