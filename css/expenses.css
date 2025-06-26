@@ -69,6 +69,33 @@
   background-color: #1b5e20;
 }
 
+#expenses button.cancel-button {
+  font-size: 0.95rem;
+  grid-column: 1 / -1;
+  background-color: #d32f2f;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  max-width: 200px;
+  width: 100%;
+  justify-self: start;
+}
+
+#expenses button.cancel-button:hover {
+  background-color: #b71c1c;
+}
+
+#expenses .button-group {
+  display: flex;
+  gap: 1rem;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+}
+
 /* Separador */
 #expenses hr {
   margin: 2rem 0;
@@ -144,4 +171,24 @@ td.actions {
   #expenses button[type="submit"] {
     max-width: 100% !important;
   }
+}
+
+.form-group-total {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  max-width: 250px;
+  font-family: Arial, sans-serif;
+  margin-left: auto;
+  margin-top: 1rem;
+}
+
+.form-group-total label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50; /* Gris oscuro moderno */
+  background-color: #ecf0f1; /* Gris muy claro */
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #bdc3c7; /* Borde suave */
 }

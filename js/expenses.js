@@ -1,8 +1,9 @@
 import { getData, setData } from "./storage.js";
-import { formatDate } from "./helpers.js";
+import { formatDate, formatCurrency } from "./helpers.js";
 
 const expenseForm = document.getElementById("expenseForm");
 const expensesTableBody = document.querySelector("#expensesTable tbody");
+const totalGastos = document.getElementById("totalGastos");
 
 let currentEditIndex = null;
 
@@ -53,6 +54,12 @@ function handleExpenseSubmit(e) {
 
 function renderExpenses() {
   const data = getData();
+  let totalExpenses = 0;
+
+  data.expenses.forEach((gasto) => {
+    totalExpenses += gasto.amount || 0;
+  });
+
   expensesTableBody.innerHTML = data.expenses
     .map(
       (e, i) => `
@@ -62,9 +69,7 @@ function renderExpenses() {
       <td>${e.farm}</td>
       <td>${e.type}</td>
       <td>${e.description}</td>
-      <td>₡${e.amount.toLocaleString("es-CR", {
-        minimumFractionDigits: 2,
-      })}</td>
+      <td>${formatCurrency(e.amount)}</td>
       <td>${e.paymentMethod}</td>
       <td class="actions">
         <button class="icon-btn edit" onclick="editExpense(${i})" title="Editar">
@@ -78,7 +83,13 @@ function renderExpenses() {
   `
     )
     .join("");
+  totalGastos.textContent = `Total Gastos: ${formatCurrency(totalExpenses)}`;
 }
+
+window.cancelExpenseForm = function () {
+  currentEditIndex = null;
+  expenseForm.reset();
+};
 
 // Necesario exponerlas al window para que funcionen los botones en HTML
 window.editExpense = function (index) {
@@ -89,6 +100,7 @@ window.editExpense = function (index) {
     }
   });
   currentEditIndex = index;
+  document.getElementById("expenseForm").scrollIntoView({ behavior: "smooth" });
 };
 
 window.deleteExpense = function (index) {

@@ -6,6 +6,7 @@ const container = document.getElementById("cattleCards");
 const farmSelect = document.getElementById("finca");
 const genderSelect = document.getElementById("sexo");
 const statusSelect = document.getElementById("estado");
+const filterEstado = document.getElementById("filterEstado");
 
 export function initCattleSection() {
   populateSelects();
@@ -40,6 +41,7 @@ export function initCattleSection() {
     form.reset();
     renderTable();
   });
+  filterEstado.addEventListener("change", renderTable);
 }
 
 function populateSelects() {
@@ -65,6 +67,18 @@ function populateSelects() {
     opt.textContent = s;
     statusSelect.appendChild(opt);
   });
+
+  const allOption = document.createElement("option");
+  allOption.value = "";
+  allOption.textContent = "Todos";
+  filterEstado.appendChild(allOption);
+
+  values.animalStates.forEach((s) => {
+    const opt = document.createElement("option");
+    opt.value = s;
+    opt.textContent = s;
+    filterEstado.appendChild(opt);
+  });
 }
 
 function getFormData() {
@@ -85,13 +99,15 @@ function getFormData() {
   const estado = statusSelect.value;
   const observaciones = document.getElementById("observaciones").value;
   const propiedad = document.getElementById("propiedad").value;
+  const comision = parseFloat(document.getElementById("comision").value) || 0;
   if (
     !idGanado ||
     !finca ||
     !fechaCompra ||
     !sexo ||
     isNaN(precioCompra) ||
-    isNaN(pesoCompra)
+    isNaN(pesoCompra) ||
+    isNaN(comision)
   ) {
     alert("Faltan datos obligatorios");
     return null;
@@ -111,16 +127,33 @@ function getFormData() {
     estado,
     observaciones,
     propiedad,
+    comision,
   };
 }
 
 function getAnimals() {
   const data = getData();
-  // Ordenar por estado: En Finca → Vendido → Muerto
+  const filtro = filterEstado?.value || "Todos";
   const estadoOrden = { "En Finca": 0, Vendido: 1, Muerto: 2 };
-  return data.animals.sort((a, b) => {
-    return (estadoOrden[a.estado] ?? 3) - (estadoOrden[b.estado] ?? 3);
-  });
+
+  let animals = data.animals
+    .slice() // Copiar para evitar modificar el original
+    .sort((a, b) => {
+      const estadoDiff =
+        (estadoOrden[a.estado] ?? 3) - (estadoOrden[b.estado] ?? 3);
+      if (estadoDiff !== 0) return estadoDiff;
+
+      // Si el estado es igual, ordenar por fecha descendente (más nuevo primero)
+      const fechaA = new Date(a.fechaVenta || a.fechaCompra);
+      const fechaB = new Date(b.fechaVenta || b.fechaCompra);
+      return fechaB - fechaA;
+    });
+
+  if (filtro !== "Todos") {
+    animals = animals.filter((a) => a.estado === filtro);
+  }
+
+  return animals;
 }
 
 function toKebabCase(str) {
@@ -129,11 +162,15 @@ function toKebabCase(str) {
 
 function renderTable() {
   container.innerHTML = "";
+
   getAnimals().forEach((animal) => {
     const card = document.createElement("div");
     card.className = "animal-card";
     const isHalf = animal.propiedad === "A medias";
-    const comision = animal.precioVenta * animal.pesoVenta * 0.03 || 0;
+    const comision =
+      animal.precioVenta *
+        animal.pesoVenta *
+        (animal.comision ? animal.comision / 100 : 0.03) || 0;
     const totalCompra = animal.pesoCompra * animal.precioCompra;
     const totalVenta =
       animal.pesoVenta * animal.precioVenta - animal.transporte - comision;
@@ -275,6 +312,7 @@ window.editAnimal = function (id) {
 
   // Guardar el ID en un atributo oculto
   form.setAttribute("data-edit-id", id);
+  document.getElementById("cattleForm").scrollIntoView({ behavior: "smooth" });
 };
 
 window.deleteAnimal = function (id) {
@@ -286,13 +324,11 @@ window.deleteAnimal = function (id) {
   renderTable();
 };
 
-// window.toggleDetails = function (button, id) {
-//   const extra = document.getElementById(id);
-//   extra.classList.toggle("hidden");
-//   button.textContent = extra.classList.contains("hidden")
-//     ? "Ver más"
-//     : "Ver menos";
-// };
+window.cancelCattleForm = function () {
+  form.removeAttribute("data-edit-id");
+  form.reset();
+};
+
 window.toggleDetails = function (button, id) {
   const details = document.querySelectorAll(`.details[data-id="${id}"]`);
   const isHidden = [...details].some((div) => div.classList.contains("hidden"));
