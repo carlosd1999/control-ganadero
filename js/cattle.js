@@ -44,6 +44,32 @@ export function initCattleSection() {
   filterEstado.addEventListener("change", renderTable);
 }
 
+function promedioSummary() {
+  const data = getData();
+  let totalDays = 0;
+  let totalWeightGain = 0;
+  let countSold = 0;
+  let totalSalePrice = 0;
+
+  data.animals.forEach((animal) => {
+    const diasFinca = diffDays(
+      animal.fechaCompra,
+      animal.fechaVenta || new Date()
+    );
+
+    if (animal.estado === "Vendido") {
+      countSold++;
+      totalDays += diasFinca || 0;
+      totalWeightGain += animal.pesoVenta - animal.pesoCompra || 0;
+      totalSalePrice += animal.precioVenta || 0;
+    }
+  });
+  const averageSalePrice = countSold > 0 ? totalSalePrice / countSold : 0;
+  const averageGainKgDay =
+    totalDays > 0 ? (totalWeightGain / totalDays).toFixed(2) : 0;
+  return { averageGainKgDay, averageSalePrice: averageSalePrice.toFixed(2) };
+}
+
 function populateSelects() {
   const { values } = getData();
 
@@ -174,9 +200,9 @@ function renderTable() {
     const totalCompra = animal.pesoCompra * animal.precioCompra;
     const totalVenta =
       animal.pesoVenta * animal.precioVenta - animal.transporte - comision;
-    const rawGananciaBruta = totalVenta - totalCompra;
-    const gananciaBruta =
-      isHalf && rawGananciaBruta > 0 ? rawGananciaBruta / 2 : rawGananciaBruta;
+    const rawGananciaNeta = totalVenta - totalCompra;
+    const gananciaNeta =
+      isHalf && rawGananciaNeta > 0 ? rawGananciaNeta / 2 : rawGananciaNeta;
     const diasFinca = diffDays(
       animal.fechaCompra,
       animal.fechaVenta || new Date()
@@ -217,7 +243,7 @@ function renderTable() {
         ${formatCurrency(totalVenta)}
       </div>
       <div class="details hidden" data-id="${animal.id}">
-        <strong>Ganancia Bruta:</strong> ${formatCurrency(gananciaBruta)}
+        <strong>Ganancia Neta:</strong> ${formatCurrency(gananciaNeta)}
       </div>
       <div class="details hidden" data-id="${
         animal.id
@@ -230,6 +256,28 @@ function renderTable() {
       </div>
       <div class="details hidden" data-id="${animal.id}">
         <strong>Transporte:</strong> ${formatCurrency(animal.transporte)}
+      </div>`;
+      seeMoreButton = `
+      <button class="toggle-details-btn" onclick="toggleDetails(this, ${animal.id})">
+        Ver más
+      </button>`;
+    }
+
+    if (!isSoldOrDead) {
+      detailInfo = `
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Peso Estimado:</strong>${(
+          animal.pesoCompra +
+          promedioSummary().averageGainKgDay * diasFinca
+        ).toFixed(0)} kg
+      </div>
+      <div class="details hidden" data-id="${animal.id}">
+        <strong>Precio Estimado:</strong>${formatCurrency(
+          (
+            animal.pesoCompra +
+            promedioSummary().averageGainKgDay * diasFinca
+          ).toFixed(0) * promedioSummary().averageSalePrice
+        )}
       </div>`;
       seeMoreButton = `
       <button class="toggle-details-btn" onclick="toggleDetails(this, ${animal.id})">
