@@ -7,6 +7,7 @@ const farmSelect = document.getElementById("finca");
 const genderSelect = document.getElementById("sexo");
 const statusSelect = document.getElementById("estado");
 const filterEstado = document.getElementById("filterEstado");
+const totalAnimales = document.getElementById("animalsCount");
 
 export function initCattleSection() {
   populateSelects();
@@ -157,7 +158,7 @@ function getFormData() {
   };
 }
 
-function getAnimals() {
+export function getAnimals() {
   const data = getData();
   const filtro = filterEstado?.value || "Todos";
   const estadoOrden = { "En Finca": 0, Vendido: 1, Muerto: 2 };
@@ -188,7 +189,7 @@ function toKebabCase(str) {
 
 function renderTable() {
   container.innerHTML = "";
-
+  const label = document.getElementById("animalsCount");
   getAnimals().forEach((animal) => {
     const card = document.createElement("div");
     card.className = "animal-card";
@@ -335,6 +336,7 @@ function renderTable() {
     `;
 
     container.appendChild(card);
+    totalAnimales.textContent = "Total Animales: " + getAnimals().length;
   });
 }
 
