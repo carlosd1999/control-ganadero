@@ -2,6 +2,8 @@ import { initializeStorage, importData, exportData } from "./storage.js";
 import { initExpenseSection } from "./expenses.js";
 import { initCattleSection } from "./cattle.js";
 import { renderSummary } from "./summary.js";
+import { initPotreroSection } from "./paddocks.js";
+import { initMedicamentoSection } from "./medications.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   await initializeStorage();
@@ -9,6 +11,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   showSection("cattle");
   initExpenseSection();
   initCattleSection();
+  initPotreroSection();
+  initMedicamentoSection();
 });
 
 window.showSection = function (sectionId) {

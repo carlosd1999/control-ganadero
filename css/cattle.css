@@ -269,6 +269,10 @@
   margin-top: 0.5rem;
 }
 
+.form-group-filter div:first-child {
+  margin-bottom: 0.5rem;
+}
+
 .form-group-filter {
   display: flex;
   flex-direction: column;

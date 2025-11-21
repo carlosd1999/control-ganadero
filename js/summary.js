@@ -127,7 +127,8 @@ export function renderSummary() {
   summary.forEach((item) => {
     const card = document.createElement("div");
     card.className = "summary-card";
-    if (item.concept === "Total Proyectado en Finca") card.classList.add("important");
+    if (item.concept === "Total Proyectado en Finca")
+      card.classList.add("important");
     if (item.concept === "Inversión en Ganado") card.classList.add("important");
 
     const monto = summaryValues[item.concept] ?? 0;

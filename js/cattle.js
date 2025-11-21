@@ -7,6 +7,7 @@ const farmSelect = document.getElementById("finca");
 const genderSelect = document.getElementById("sexo");
 const statusSelect = document.getElementById("estado");
 const filterEstado = document.getElementById("filterEstado");
+const filterFinca = document.getElementById("filterFinca");
 const totalAnimales = document.getElementById("animalsCount");
 
 export function initCattleSection() {
@@ -43,6 +44,7 @@ export function initCattleSection() {
     renderTable();
   });
   filterEstado.addEventListener("change", renderTable);
+  filterFinca.addEventListener("change", renderTable);
 }
 
 function promedioSummary() {
@@ -95,16 +97,31 @@ function populateSelects() {
     statusSelect.appendChild(opt);
   });
 
-  const allOption = document.createElement("option");
-  allOption.value = "";
-  allOption.textContent = "Todos";
-  filterEstado.appendChild(allOption);
-
+  const allOption1 = document.createElement("option");
+  allOption1.value = "";
+  allOption1.textContent = "Todos";
+  filterEstado.appendChild(allOption1);
   values.animalStates.forEach((s) => {
     const opt = document.createElement("option");
     opt.value = s;
     opt.textContent = s;
+    if (s === "En Finca") {
+      opt.selected = true;
+    }
     filterEstado.appendChild(opt);
+  });
+
+  const allOption2 = document.createElement("option");
+  allOption2.value = "";
+  allOption2.textContent = "Todos";
+  allOption2.selected = true;
+
+  filterFinca.appendChild(allOption2);
+  values.farms.forEach((f) => {
+    const opt = document.createElement("option");
+    opt.value = f;
+    opt.textContent = f;
+    filterFinca.appendChild(opt);
   });
 }
 
@@ -161,6 +178,7 @@ function getFormData() {
 export function getAnimals() {
   const data = getData();
   const filtro = filterEstado?.value || "Todos";
+  const filtroFinca = filterFinca?.value || "Todos";
   const estadoOrden = { "En Finca": 0, Vendido: 1, Muerto: 2 };
 
   let animals = data.animals
@@ -180,6 +198,10 @@ export function getAnimals() {
     animals = animals.filter((a) => a.estado === filtro);
   }
 
+  if (filtroFinca !== "Todos") {
+    animals = animals.filter((a) => a.finca === filtroFinca);
+  }
+
   return animals;
 }
 
@@ -189,7 +211,6 @@ function toKebabCase(str) {
 
 function renderTable() {
   container.innerHTML = "";
-  const label = document.getElementById("animalsCount");
   getAnimals().forEach((animal) => {
     const card = document.createElement("div");
     card.className = "animal-card";
@@ -336,8 +357,8 @@ function renderTable() {
     `;
 
     container.appendChild(card);
-    totalAnimales.textContent = "Total Animales: " + getAnimals().length;
   });
+  totalAnimales.textContent = "Total Animales: " + getAnimals().length;
 }
 
 window.editAnimal = function (id) {

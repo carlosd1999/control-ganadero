@@ -1,132 +1,120 @@
 {
-    "values": {
-        "farms": [
-            "La Paz",
-            "Katira",
-            "Pataste"
-        ],
-        "expenseTypes": [
-            "Guía",
-            "Transporte",
-            "Medicamentos",
-            "Sal",
-            "Miel",
-            "Alquiler",
-            "Materiales",
-            "Alimento"
-        ],
-        "gender": [
-            "Macho",
-            "Hembra"
-        ],
-        "paymentMethods": [
-            "SINPE",
-            "Tarjeta",
-            "Efectivo"
-        ],
-        "animalStates": [
-            "En Finca",
-            "Vendido",
-            "Muerto"
-        ]
+  "values": {
+    "farms": ["La Paz", "Katira", "Pataste", "Buena Vista"],
+    "expenseTypes": [
+      "Guía",
+      "Transporte",
+      "Medicamentos",
+      "Sal",
+      "Miel",
+      "Alquiler",
+      "Materiales",
+      "Alimento"
+    ],
+    "gender": ["Macho", "Hembra"],
+    "paymentMethods": ["SINPE", "Tarjeta", "Efectivo"],
+    "animalStates": ["En Finca", "Vendido", "Muerto"],
+    "paddockStates": ["Descanso", "Ocupado"]
+  },
+  "paddocks": [],
+  "medications": [],
+  "expenses": [],
+  "animals": [],
+  "summary": [
+    {
+      "concept": "Ganancia Neta",
+      "amount": 0,
+      "note": "Utilidad final"
     },
-    "expenses": [],
-    "animals": [],
-    "summary": [
-        {
-            "concept": "Ganancia Neta",
-            "amount": 0,
-            "note": "Utilidad final"
-        },
-        {
-            "concept": "Inversión en Ganado",
-            "amount": 0,
-            "note": "Total compra de ganado"
-        },
-        {
-            "concept": "Total de Gastos",
-            "amount": 0,
-            "note": "Total gastos operativos"
-        },
-        {
-            "concept": "Total de Ventas",
-            "amount": 0,
-            "note": "Total ingresos por venta"
-        },
-        {
-            "concept": "Ganancia Bruta",
-            "amount": 0,
-            "note": "Excluye otros gastos"
-        },
-        {
-            "concept": "Comisiones (3%)",
-            "amount": 0,
-            "note": "Comisión sobre ventas"
-        },
-        {
-            "concept": "Transporte",
-            "amount": 0,
-            "note": "Flete a la subasta"
-        },
-        {
-            "concept": "Margen de Ganancia",
-            "amount": 0,
-            "note": "Indicador de rentabilidad"
-        },
-        {
-            "concept": "Días Promedio en Finca",
-            "amount": 0,
-            "note": "Promedio días en finca"
-        },
-        {
-            "concept": "Promedio de Ganancia Kg/Día",
-            "amount": 0,
-            "note": "Promedio ganancia Kg/Día"
-        },
-        {
-            "concept": "Promedio Precio Compra",
-            "amount": 0,
-            "note": "Promedio del precio de compra"
-        },
-        {
-            "concept": "Promedio Precio Venta",
-            "amount": 0,
-            "note": "Promedio del precio de venta"
-        },
-        {
-            "concept": "Promedio Peso Compra",
-            "amount": 0,
-            "note": "Promedio del peso de compra"
-        },
-        {
-            "concept": "Promedio Peso Venta",
-            "amount": 0,
-            "note": "Promedio del peso de venta"
-        },
-        {
-            "concept": "Ganancia Precio/Día",
-            "amount": 0,
-            "note": "Ganancia en precio por día"
-        },
-        {
-            "concept": "Ganancia por animal",
-            "amount": 0,
-            "note": "Promedio de ganancia por animal"
-        },
-        {
-            "concept": "Inversión en Ganado en Finca",
-            "amount": 0,
-            "note": "Inversión actual en animales vivos"
-        },
-        {
-            "concept": "Ganancia Proyectada en Finca",
-            "amount": 0,
-            "note": "Utilidad estimada por vender"
-        },
-        {
-            "concept": "Total Proyectado en Finca",
-            "amount": 0,
-            "note": "Inversión más ganancia esperada"
-        }
-    ]
+    {
+      "concept": "Inversión en Ganado",
+      "amount": 0,
+      "note": "Total compra de ganado"
+    },
+    {
+      "concept": "Total de Gastos",
+      "amount": 0,
+      "note": "Total gastos operativos"
+    },
+    {
+      "concept": "Total de Ventas",
+      "amount": 0,
+      "note": "Total ingresos por venta"
+    },
+    {
+      "concept": "Ganancia Bruta",
+      "amount": 0,
+      "note": "Excluye otros gastos"
+    },
+    {
+      "concept": "Comisiones (3%)",
+      "amount": 0,
+      "note": "Comisión sobre ventas"
+    },
+    {
+      "concept": "Transporte",
+      "amount": 0,
+      "note": "Flete a la subasta"
+    },
+    {
+      "concept": "Margen de Ganancia",
+      "amount": 0,
+      "note": "Indicador de rentabilidad"
+    },
+    {
+      "concept": "Días Promedio en Finca",
+      "amount": 0,
+      "note": "Promedio días en finca"
+    },
+    {
+      "concept": "Promedio de Ganancia Kg/Día",
+      "amount": 0,
+      "note": "Promedio ganancia Kg/Día"
+    },
+    {
+      "concept": "Promedio Precio Compra",
+      "amount": 0,
+      "note": "Promedio del precio de compra"
+    },
+    {
+      "concept": "Promedio Precio Venta",
+      "amount": 0,
+      "note": "Promedio del precio de venta"
+    },
+    {
+      "concept": "Promedio Peso Compra",
+      "amount": 0,
+      "note": "Promedio del peso de compra"
+    },
+    {
+      "concept": "Promedio Peso Venta",
+      "amount": 0,
+      "note": "Promedio del peso de venta"
+    },
+    {
+      "concept": "Ganancia Precio/Día",
+      "amount": 0,
+      "note": "Ganancia en precio por día"
+    },
+    {
+      "concept": "Ganancia por animal",
+      "amount": 0,
+      "note": "Promedio de ganancia por animal"
+    },
+    {
+      "concept": "Inversión en Ganado en Finca",
+      "amount": 0,
+      "note": "Inversión actual en animales vivos"
+    },
+    {
+      "concept": "Ganancia Proyectada en Finca",
+      "amount": 0,
+      "note": "Utilidad estimada por vender"
+    },
+    {
+      "concept": "Total Proyectado en Finca",
+      "amount": 0,
+      "note": "Inversión más ganancia esperada"
+    }
+  ]
 }

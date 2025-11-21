@@ -12,8 +12,8 @@ export function formatDate(dateStr) {
 
 // Calcula diferencia de días entre dos fechas (ignora horas)
 export function diffDays(start, end) {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
+  const startDate = parseLocalDate(start);
+  const endDate = parseLocalDate(end);
 
   // Fuerza ambas fechas a medianoche (00:00:00)
   startDate.setHours(0, 0, 0, 0);
@@ -30,4 +30,13 @@ export function formatCurrency(value) {
     currency: "CRC",
     minimumFractionDigits: 2,
   });
+}
+
+function parseLocalDate(date) {
+  if (date instanceof Date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(year, month - 1, day); // medianoche local
 }
